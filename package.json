@@ -1,0 +1,24 @@
+{
+  "name": "grapher",
+  "version": "0.1.0",
+  "description": "simple graph program",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nissekissen/Grapher.git"
+  },
+  "author": "Nissekissen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nissekissen/Grapher/issues"
+  },
+  "homepage": "https://github.com/Nissekissen/Grapher#readme",
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.30",
+    "mathjs": "^11.3.3"
+  }
+}

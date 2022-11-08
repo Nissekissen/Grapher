@@ -1,72 +1,72 @@
-class Graph {
-    constructor(formula, minX, maxX) {
-        // Formula syntax example: 2x+4
-        // Split formula into characters.
-        // handle character via function
-        // output a function with that takes in x and returns y.
-        const chars = formula.split("");
-        
-        this.handleX = (x) => {
-            let mulitpliers = [];
-            let numberPart = "";
-            let numMode = false;
-            let ans = 0;
-            let a, b, o;
+const math = require('mathjs');
+const CanvasBuilder = require('./canvasBuilder');
+const { promises } = require('fs')
+const { join } = require('path')
 
-            for (let i = 0; i < chars.length; i++) {
-                let char = chars[i];
-                if (char == "x") {
-                    char = x;
-                }
-                if (i == 0) {
-                    if (isNaN(char)) throw new Error('Invalid syntax');
-                }
-                if (!isNaN(chars[i+1]) && !isNaN(chars[i])) {
-                    numberPart += char;
-                    numMode = true;
-                    continue;
-                }
-                numberPart += char;
-                mulitpliers.push(numberPart)
-                numberPart = "";
-                numMode = true ? !isNaN(char) : false;
-                if (i < 2) continue;
-                if (isNaN(chars[i-1])) {
-                    a = chars[i-2];
-                    o = 3;
-                    while (o <= i) {
-                        if (!isNaN(chars[i-o])) {
-                            a = chars[i-o] + a;
-                            console.log(b);
-                        }
-                        o++;
-                    }
-                    b = char;
-                    o = 1;
-                    while (o + i < chars.length) {
-                        if (!isNaN(chars[i+o])) {
-                            b += chars[i+o];
-                        }
-                        o++;
-                    }
-                    switch (chars[i-1]) {
-                        case "*":
-                            ans = parseInt(ans) + (parseInt(a) * parseInt(b));
-                            break;
-                        case "+":
-                            ans = parseInt(ans) + (parseInt(a) + parseInt(b));
-                            break;
-                    }
-                }
-                console.log("a: " + a + ", b: " + b + ", i: " + i);
+class Graph {
+    constructor(formula, minX, maxX, minY, maxY) {
+        this.points = [];
+        this.minX = minX;
+        this.maxX = maxX;
+        this.minY = minY;
+        this.maxY = maxY;
+
+        this.handleX = x => {
+            let newFormula = formula
+            if (x < 0) {
+                newFormula = newFormula.replaceAll('x', `(${x})`);
+            } else {
+                newFormula = newFormula.replaceAll('x', x);
             }
-            return ans;
+            return math.evaluate(newFormula)
         }
 
         for (let i = minX; i <= maxX; i++) {
-            console.log(this.handleX(i));
+            let obj = {
+                x: i,
+                y: this.handleX(i)
+            }
+            this.points.push(obj);
         }
     }
+    recalculatePoint(point) {
+        let newPoint = point;
+        newPoint.x = point.x - this.minX;
+        newPoint.y = -(point.y + this.minY)
+        return newPoint
+    }
+    async generateImage(resolution) {
+        const canvas = new CanvasBuilder(this.maxX - this.minX, this.maxY - this.minY);
+
+        canvas.ctx.fillStyle = 'white';
+        canvas.ctx.fillRect(0, 0, canvas.w, canvas.h)
+
+        for (let point of this.points) {
+            point = this.recalculatePoint(point);
+            
+        }
+
+        
+
+        for (const point of this.points) {
+            let i = this.points.indexOf(point);
+            if (i < this.points.length-1) {
+                let otherPoint = this.points[i+1];
+                canvas.ctx.strokeStyle = "black";
+                canvas.ctx.lineWidth = 2;
+                canvas.ctx.beginPath();
+                canvas.ctx.moveTo(point.x, point.y);
+                canvas.ctx.lineTo(otherPoint.x, otherPoint.y);
+                canvas.ctx.stroke();
+            }
+        }
+
+        const pngData = await canvas.canvas.encode('png')
+
+        await promises.writeFile('./graphs/graph.png', pngData);
+        console.log("Done. Check graph.png")
+    }
+
 }
 
-export default Graph;
+module.exports = Graph;
