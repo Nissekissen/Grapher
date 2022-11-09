@@ -1,9 +1,9 @@
 const Graph = require('./src/Graph')
 const math = require('mathjs')
 
-const formula = "x^2"
+const formula = "sin(x)"
 
-const test = new Graph(formula, -100, 100, -100, 100)
+const test = new Graph(formula, -100, 100, -10, 10)
 
 
 
