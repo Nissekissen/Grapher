@@ -1,14 +1,16 @@
 const Graph = require('./src/Graph')
 const math = require('mathjs')
+const Renderer = require('./src/Renderer')
 
-const formula = "sin(x)"
-
-const test = new Graph(formula, -100, 100, -10, 10)
-
+// Example renderer
+const renderer = new Renderer([
+    { formula: 'x^3/100', minX: -500, maxX: 500, color: 'red', res: 0.1 },
+    { formula: '-(x^3/100)', minX: -500, maxX: 5000, color: 'white', res: 0.1 }
+], 1000, 1000, -100, 100, -100, 100);
 
 
 async function main() {
-    await test.generateImage(0);
+    await renderer.generateImage('png', './graphs/graph');
 }
 main();
 
