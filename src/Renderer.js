@@ -1,6 +1,8 @@
 const CanvasBuilder = require('./canvasBuilder');
-const { promises } = require('fs');
+const { promises, fstat } = require('fs');
 const Graph = require('./Graph');
+const path = require('path');
+const fs = require('fs')
 
 module.exports = class Renderer {
     constructor(graphs, w, h, minX, maxX, minY, maxY) {
@@ -83,7 +85,7 @@ module.exports = class Renderer {
             }
         }
     }
-    async generateImage(type, loc) {
+    async generateImage(type, folder, fileName) {
 
         this.createCanvas(1000, 1000);
         this.drawGrid(this.graphs[0], this.canvas.ctx)
@@ -94,7 +96,12 @@ module.exports = class Renderer {
 
         const pngData = await this.canvas.canvas.encode(type);
 
-        await promises.writeFile(`${loc}.${type}`, pngData);
+        const dir = __dirname + '/..' + folder
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir)
+        }
+
+        await promises.writeFile(`${dir}${fileName}.${type}`, pngData);
         console.log("Done. Check graph.png")
     }
 }
