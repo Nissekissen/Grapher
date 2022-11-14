@@ -1,6 +1,6 @@
 const Canvas = require('@napi-rs/canvas');
 
-class CanvasBuilder {
+module.exports = class CanvasBuilder {
     constructor(w, h) {
         this.w = w;
         this.h = h;
@@ -8,5 +8,3 @@ class CanvasBuilder {
         this.ctx = this.canvas.getContext('2d');
     }
 }
-
-module.exports = CanvasBuilder;
