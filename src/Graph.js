@@ -44,7 +44,7 @@ module.exports = class Graph {
         newPoint.x = newPoint.x / ((this.w / 2) / this.maxX)
         newPoint.x = newPoint.x + this.minX;
         newPoint.y = newPoint.y / ((this.h / 2) / this.maxY)
-        newPoint.y = newPoint.y + this.minY;
+        newPoint.y = -(newPoint.y + this.minY);
         return newPoint;
     }
     // async generateImage(resolution) {

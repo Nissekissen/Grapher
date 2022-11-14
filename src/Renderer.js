@@ -2,7 +2,8 @@ const CanvasBuilder = require('./canvasBuilder');
 const { promises, fstat } = require('fs');
 const Graph = require('./Graph');
 const path = require('path');
-const fs = require('fs')
+const fs = require('fs');
+const { abs } = require('mathjs');
 
 module.exports = class Renderer {
     constructor(graphs, w, h, minX, maxX, minY, maxY) {
@@ -42,7 +43,7 @@ module.exports = class Renderer {
     }
     drawGrid(graph, ctx) {
         //Horizontal lines
-        for (let y = -graph.recalculatePoint({ x: 0, y: 0 }).y; y < graph.undoCalculate({ x: 0, y: this.h }).y; y++) {
+        for (let y = -graph.recalculatePoint({ x: 0, y: 0 }).y; y < graph.undoCalculate({ x: 0, y: 0 }).y; y++) {
             if (y % 10 == 0) {
                 if (y == 0) { ctx.lineWidth = 2; }
                 else { ctx.lineWidth = 1; }
@@ -67,6 +68,22 @@ module.exports = class Renderer {
             }
         }
     }
+    intersect(g1, g2) {
+        let intersects = []
+        const resolution = 0.1
+        for (let i = 0; i < g1.points.length; i++) {
+            let p1 = g1.points[i]
+            let p2 = g2.points.filter(obj => obj.x == p1.x)[0]
+            if (abs(parseFloat(p2.y.toFixed(2)) - parseFloat(p1.y.toFixed(2))) <= resolution) {
+                let result = g1.undoCalculate({ x: parseFloat(p1.x.toFixed(2)), y: parseFloat(p1.y.toFixed(2)) })
+                intersects.push({
+                    x: parseFloat(result.x.toFixed(2)),
+                    y: parseFloat(result.y.toFixed(2))
+                })
+            }
+        }
+        return intersects;
+    }
     drawGraph(graph) {
         for (let point of graph.points) {
             point = graph.recalculatePoint(point);
@@ -87,7 +104,7 @@ module.exports = class Renderer {
     }
     async generateImage(type, folder, fileName) {
 
-        this.createCanvas(1000, 1000);
+        this.createCanvas(this.w, this.h);
         this.drawGrid(this.graphs[0], this.canvas.ctx)
 
         for (const graph of this.graphs) {
@@ -103,5 +120,6 @@ module.exports = class Renderer {
 
         await promises.writeFile(`${dir}${fileName}.${type}`, pngData);
         console.log("Done. Check graph.png")
+        return pngData;
     }
 }
