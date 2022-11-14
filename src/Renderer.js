@@ -5,7 +5,21 @@ const path = require('path');
 const fs = require('fs');
 const { abs } = require('mathjs');
 
+/** @class Renderer */
 module.exports = class Renderer {
+    /**
+     * Creates an instance of a renderer
+     * 
+     * @author Nissekissen
+     * 
+     * @param {Array.<Graph>} graphs 
+     * @param {Number} w Image width (px)
+     * @param {Number} h Image height (px)
+     * @param {Number} minX Smallest x value visible
+     * @param {Number} maxX Biggest x value visible
+     * @param {Number} minY Smallest y value visible
+     * @param {Number} maxY Biggest y value visible
+     */
     constructor(graphs, w, h, minX, maxX, minY, maxY) {
         // Graphs example:
         // graphs = [
@@ -27,6 +41,12 @@ module.exports = class Renderer {
         }
 
     }
+    /**
+     * Creates a canvas and fills it with a background color
+     * 
+     * @param {Number} w 
+     * @param {Number} h 
+     */
     createCanvas(w, h) {
         this.w = w;
         this.h = h;
@@ -34,13 +54,24 @@ module.exports = class Renderer {
 
         this.canvas.ctx.fillStyle = 'white';
         this.canvas.ctx.fillRect(0, 0, this.canvas.w, this.canvas.h)
-    }
+    } 
+    /**
+     * 
+     * @param {CanvasRenderingContext2D} ctx 
+     * @param {{x: Number, y: Number}} p1 
+     * @param {{x: Number, y: Number}} p2 
+     */
     line(ctx, p1, p2) {
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
     }
+    /**
+     * 
+     * @param {Graph} graph 
+     * @param {CanvasRenderingContext2D} ctx Rendering Context 
+     */
     drawGrid(graph, ctx) {
         //Horizontal lines
         for (let y = -graph.recalculatePoint({ x: 0, y: 0 }).y; y < graph.undoCalculate({ x: 0, y: 0 }).y; y++) {
@@ -68,6 +99,12 @@ module.exports = class Renderer {
             }
         }
     }
+    /**
+     * 
+     * @param {Graph} g1 First graph
+     * @param {Graph} g2 Second Graph
+     * @returns {Array.<{x: Number, y: Number}>} 
+     */
     intersect(g1, g2) {
         let intersects = []
         const resolution = 0.1
@@ -84,6 +121,10 @@ module.exports = class Renderer {
         }
         return intersects;
     }
+    /**
+     * 
+     * @param {Graph} graph 
+     */
     drawGraph(graph) {
         for (let point of graph.points) {
             point = graph.recalculatePoint(point);
@@ -102,6 +143,13 @@ module.exports = class Renderer {
             }
         }
     }
+    /**
+     * 
+     * @param {String} type File format. PNG, JPEG, AVIP and WEPB supported.
+     * @param {String} folder 
+     * @param {String} fileName 
+     * @returns {Buffer} File data
+     */
     async generateImage(type, folder, fileName) {
 
         this.createCanvas(this.w, this.h);
