@@ -12,7 +12,7 @@ module.exports = class Renderer {
      * 
      * @author Nissekissen
      * 
-     * @param {Array.<Graph>} graphs 
+     * @param {Array.<{formula: String, minX: Number, maxX: Number, color: String, res: Number}>} graphs 
      * @param {Number} w Image width (px)
      * @param {Number} h Image height (px)
      * @param {Number} minX Smallest x value visible
@@ -23,8 +23,8 @@ module.exports = class Renderer {
     constructor(graphs, w, h, minX, maxX, minY, maxY) {
         // Graphs example:
         // graphs = [
-        //      { formula: '2x+3', minX: -100, maxX: 100 },
-        //      { formula: 'sin(x)', minX: -100, maxX: 100 }
+        //      { formula: '2x+3', minX: -100, maxX: 100, color: 'red', res: 0.1 },
+        //      { formula: 'sin(x)', minX: -100, maxX: 100, color: 'green', res: o.1 }
         // ]
         this.graphData = graphs;
         this.w = w;
@@ -74,8 +74,9 @@ module.exports = class Renderer {
      */
     drawGrid(graph, ctx) {
         //Horizontal lines
+        const spacing = abs(this.minX - this.maxX) / 20
         for (let y = -graph.recalculatePoint({ x: 0, y: 0 }).y; y < graph.undoCalculate({ x: 0, y: 0 }).y; y++) {
-            if (y % 10 == 0) {
+            if (y % spacing == 0) {
                 if (y == 0) { ctx.lineWidth = 2; }
                 else { ctx.lineWidth = 1; }
                 let p1 = graph.recalculatePoint({ x: graph.minX, y: y });
@@ -88,7 +89,7 @@ module.exports = class Renderer {
 
         // Vertical lines
         for (let x = -graph.recalculatePoint({ x: 0, y: 0 }).x; x < graph.undoCalculate({ x: this.w, y: 0 }).x; x++) {
-            if (x % 10 == 0) {
+            if (x % spacing == 0) {
                 if (x == 0) { ctx.lineWidth = 2; }
                 else { ctx.lineWidth = 1; }
                 let p1 = graph.recalculatePoint({ x: x, y: graph.minY });
@@ -122,6 +123,7 @@ module.exports = class Renderer {
         return intersects;
     }
     /**
+     * Draws out the graphs
      * 
      * @param {Graph} graph 
      */
