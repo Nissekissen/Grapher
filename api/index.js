@@ -36,7 +36,7 @@ router.route('/graph').get(async (req, res) => {
         res.end(await renderer.generateImage('png', '', '', false))
     } catch (error) {
         console.log(error)
-        return res.status(400).json({message: "Bad request."})
+        return res.status(400).json({message: error})
         
     }
     
