@@ -9,6 +9,11 @@ router.get('/', (req, res) => {
     res.json({message: "Welcome to my API"})
 })
 
+router.route('/graph').get((req, res) => {
+    console.log(req)
+    console.log(res)
+})
+
 app.use('/api', router)
 
 app.listen(port, () => {
