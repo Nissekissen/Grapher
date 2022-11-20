@@ -32,10 +32,10 @@ router.route('/graph').get(async (req, res) => {
                 "Content-Type": "image/png"
             }
         );
-    
         res.end(await renderer.generateImage('png', '', '', false))
     } catch (error) {
-        return res.status(400).json({message: "Bad request.", "errorCode": error.constructor.name})
+        res.writeHead()
+        res.status(400).json({message: "Bad request.", "errorCode": error.constructor.name})
         
     }
     
