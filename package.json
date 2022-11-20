@@ -4,8 +4,7 @@
   "description": "simple graph program",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js && node api/index.js",
-    "test": "echo \"test\""
+    "start": "node api/index.js"
   },
   "repository": {
     "type": "git",
