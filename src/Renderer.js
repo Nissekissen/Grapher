@@ -150,9 +150,10 @@ module.exports = class Renderer {
      * @param {String} type File format. PNG, JPEG, AVIP and WEPB supported.
      * @param {String} folder 
      * @param {String} fileName 
+     * @param {Boolean} writeToFile If it should write the data to a file
      * @returns {Buffer} File data
      */
-    async generateImage(type, folder, fileName) {
+    async generateImage(type, folder, fileName, writeToFile) {
 
         this.createCanvas(this.w, this.h);
         this.drawGrid(this.graphs[0], this.canvas.ctx)
@@ -161,15 +162,19 @@ module.exports = class Renderer {
             this.drawGraph(graph);
         }
 
+        
+
         const pngData = await this.canvas.canvas.encode(type);
+        
+        if (writeToFile) {
+            const dir = __dirname + '/..' + folder
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir)
+            }
 
-        const dir = __dirname + '/..' + folder
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir)
+            await promises.writeFile(`${dir}${fileName}.${type}`, pngData);
+            console.log("Done. Check graph.png")
         }
-
-        await promises.writeFile(`${dir}${fileName}.${type}`, pngData);
-        console.log("Done. Check graph.png")
         return pngData;
     }
 }
