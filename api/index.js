@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs')
 const Renderer = require('../src/Renderer');
 const app = express()
 const router = express.Router()
@@ -27,14 +28,7 @@ router.route('/graph').get(async (req, res) => {
             rd.maxY
         )
         const pngData = await renderer.generateImage('png', '', '', false)
-        res.writeHead(
-            200,
-            {
-                "Content-Type": "image/png",
-                "Content-Length": pngData.length
-            }
-        );
-        res.end(pngData)
+        res.end(pngData.toString())
     } catch (error) {
         console.error(error)
         res.status(400).json({message: "Bad request.", "errorCode": error.constructor.name})
