@@ -40,7 +40,7 @@ module.exports = class Graph {
         this.start = start;
         this.stop = stop;
         this.color = color;
-
+        console.log(formula)
         /** @private */ this.handleX = x => {
             let newFormula = formula
             newFormula = newFormula.replaceAll('x', `(${x})`);
