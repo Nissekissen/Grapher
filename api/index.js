@@ -26,13 +26,15 @@ router.route('/graph').get(async (req, res) => {
             rd.minY,
             rd.maxY
         )
+        const pngData = await renderer.generateImage('png', '', '', false)
         res.writeHead(
             200,
             {
-                "Content-Type": "image/png"
+                "Content-Type": "image/png",
+                "Content-Length": pngData.length
             }
         );
-        res.end(await renderer.generateImage('png', '', '', false))
+        res.end(pngData)
     } catch (error) {
         console.error(error)
         res.status(400).json({message: "Bad request.", "errorCode": error.constructor.name})
