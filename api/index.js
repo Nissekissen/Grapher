@@ -1,11 +1,11 @@
 const express = require('express')
 const app = express()
-const port = 8000
+const port = process.env.PORT || 3001;
 
 app.get('/api', (req, res) => {
     res.send("test")
 })
 
 app.listen(port, () => {
-    console.log('API started')
+    console.log('API started at port ' + port)
 })
