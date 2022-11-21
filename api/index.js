@@ -31,6 +31,7 @@ router.route('/graph').get(async (req, res) => {
         res.end(pngData.toString())
     } catch (error) {
         console.error(error)
+        console.log(graphsData)
         res.status(400).json({message: "Bad request.", "errorCode": error.constructor.name})
         
     }

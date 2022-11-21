@@ -16,7 +16,7 @@ const renderer = new Renderer(
 
 (async () => {
     // Render the image
-    await renderer.generateImage('png', '/graphs/', 'intersect');
+    await renderer.generateImage('png', '/graphs/', 'intersect', true);
     // Log the intersect points of the two graphs.
     console.log(renderer.intersect(renderer.graphs[0], renderer.graphs[1]));
 })()

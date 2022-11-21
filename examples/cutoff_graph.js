@@ -12,5 +12,5 @@ const renderer = new Renderer(
 
 (async () => {
     // Generate the image
-    await renderer.generateImage('png', '/graphs/', 'cutoff');
+    await renderer.generateImage('png', '/graphs/', 'cutoff', true);
 })()

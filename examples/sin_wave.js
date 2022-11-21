@@ -11,5 +11,5 @@ const renderer = new Renderer(
 );
 
 (async () => {
-    await renderer.generateImage('png', '/graphs/', 'example');
+    await renderer.generateImage('png', '/graphs/', 'example', true);
 })()
