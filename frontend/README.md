@@ -37,7 +37,6 @@ Here is an exampe of using the data with `node-fetch`:
     console.log(res.status);
     if (res.status == 200) {
         const blob = await res.blob();
-        console.log(blob);
         const buffer = Buffer.from(await blob.arrayBuffer());
         fs.writeFileSync("./test.png", buffer);
     }
