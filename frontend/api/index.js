@@ -1,24 +1,18 @@
 const express = require('express');
 const fs = require('fs')
-const Renderer = require('../src/Renderer');
-const app = express()
-const router = express.Router()
-const port = 10000;
+const Renderer = require('../../src/Renderer');
 
 
-
-router.get('/', (req, res) => {
-    res.json({message: "Welcome to my API"})
-})
-
-router.route('/graph').get(async (req, res) => {
+module.exports = async (req, res) => {
     if (!req.headers.renderer) return res.status(400).json({message: "Invalid headers. \"Renderer\" header is required."})
     if (!req.headers.graphs) return res.status(400).json({message: "Invalid headers. \"Graphs\" header is required."})
     
     try {
+        console.log(JSON.stringify(req.headers.renderer))
         const rd = JSON.parse(req.headers.renderer)
+        console.log(req.headers.graphs)
         const graphsData = JSON.parse(req.headers.graphs)
-        console.log(graphsData)
+        
         const renderer = new Renderer(
             graphsData,
             rd.w,
@@ -29,17 +23,12 @@ router.route('/graph').get(async (req, res) => {
             rd.maxY
         )
         const pngData = await renderer.generateImage('png', '', '', false)
-        res.end(pngData.toString())
+        res.send(pngData)
     } catch (error) {
         console.error(error)
         res.status(400).json({message: "Bad request.", "errorCode": error.constructor.name})
         
     }
     
-})
+}
 
-app.use('/api', router)
-
-app.listen(port, () => {
-    console.log('API started at port ' + port)
-})
