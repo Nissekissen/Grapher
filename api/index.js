@@ -18,6 +18,7 @@ router.route('/graph').get(async (req, res) => {
     try {
         const rd = JSON.parse(req.headers.renderer)
         const graphsData = JSON.parse(req.headers.graphs)
+        console.log(graphsData)
         const renderer = new Renderer(
             graphsData,
             rd.w,
@@ -31,7 +32,6 @@ router.route('/graph').get(async (req, res) => {
         res.end(pngData.toString())
     } catch (error) {
         console.error(error)
-        console.log(graphsData)
         res.status(400).json({message: "Bad request.", "errorCode": error.constructor.name})
         
     }
