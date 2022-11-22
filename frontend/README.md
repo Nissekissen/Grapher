@@ -9,9 +9,7 @@ const headers = {
     "renderer":
         '{ "minX": -10, "maxX": 10, "minY": -10"maxY": 10, "w": 500, "h": 500 }',
     "graphs": [
-        '{ "formula": "sin(x)", "minX": -10, "maxX"10, "color": "red", "res": 0.1 }',
-        '{ "formula": "x^2/10", "minX": -10, "maxX"10, "color": "red", "res": 0.1 }'
-    ]
+        '[{ "formula": "sin(x)", "minX": -10, "maxX"10, "color": "red", "res": 0.1 }, { "formula": "x^2/10", "minX": -10, "maxX"10, "color": "red", "res": 0.1 }]'
 }
 ```
 
